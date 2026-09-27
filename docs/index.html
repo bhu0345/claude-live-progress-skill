@@ -137,29 +137,44 @@ h2{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
 </main>
 
 <script>
-/* Demo only: fakes the Claude runtime so this page runs outside Claude. */
+/* Demo only: fakes the Claude runtime so this page runs outside Claude. Open with #en for English. */
 (function(){
+  var en = location.hash === "#en";
+  var T = en ? {
+    title:"Clean 2025 sales data and write the quarterly report", activity:"Cleaning CSV 7 of 12: merging duplicate customer records",
+    s1:"Read and check 12 data files", n1:"2 files were GBK-encoded, converted", s2:"Clean the data", unit:"files",
+    s3:"Compute quarterly metrics", s4:"Draw charts", s5:"Write the report", s6:"Export PDF", n6:"Switched to a Docs document, no PDF needed",
+    l1:"Task started", l2:"2 files had the wrong encoding, converted to UTF-8", l3:"Step 1 done, cleaning started",
+    act:function(n){return "Cleaning CSV "+n+" of 12";}, act3:"Computing quarterly metrics", l4:"Cleaning done, computing metrics"
+  } : {
+    title:"整理 2025 年销售数据并生成季度报告", activity:"正在清洗第 7/12 个 CSV：合并重复客户记录",
+    s1:"读取并检查 12 个数据文件", n1:"发现 2 个文件编码为 GBK，已转换", s2:"清洗数据", unit:"个文件",
+    s3:"计算季度指标", s4:"绘制图表", s5:"写报告正文", s6:"导出 PDF", n6:"改为 Docs 文档，不需要 PDF",
+    l1:"开始任务", l2:"2 个文件编码异常，已转换为 UTF-8", l3:"第 1 步完成，开始清洗",
+    act:function(n){return "正在清洗第 "+n+"/12 个 CSV";}, act3:"正在计算季度指标", l4:"清洗完成，开始计算指标"
+  };
   var t0 = Math.floor(Date.now()/1000), cb = null;
   var s = {
-    title:"整理 2025 年销售数据并生成季度报告", lang:(location.hash==="#en"?"en":"zh"), status:"running",
-    startedAt:t0-1500, updatedAt:t0-20, activity:"正在清洗第 7/12 个 CSV：合并重复客户记录",
+    title:T.title, lang:(en?"en":"zh"), status:"running",
+    startedAt:t0-1500, updatedAt:t0-20, activity:T.activity,
     steps:{
-      s01:{n:1,title:"读取并检查 12 个数据文件",est:3,status:"done",startedAt:t0-1500,endedAt:t0-1260,note:"发现 2 个文件编码为 GBK，已转换"},
-      s02:{n:2,title:"清洗数据",est:8,status:"running",startedAt:t0-1260,done:7,total:12,unit:"个文件"},
-      s03:{n:3,title:"计算季度指标",est:5,status:"pending"},
-      s04:{n:4,title:"绘制图表",est:6,status:"pending"},
-      s05:{n:5,title:"写报告正文",est:10,status:"pending"},
-      s06:{n:6,title:"导出 PDF",est:2,status:"skipped",note:"改为 Docs 文档，不需要 PDF"}
+      s01:{n:1,title:T.s1,est:3,status:"done",startedAt:t0-1500,endedAt:t0-1260,note:T.n1},
+      s02:{n:2,title:T.s2,est:8,status:"running",startedAt:t0-1260,done:7,total:12,unit:T.unit},
+      s03:{n:3,title:T.s3,est:5,status:"pending"},
+      s04:{n:4,title:T.s4,est:6,status:"pending"},
+      s05:{n:5,title:T.s5,est:10,status:"pending"},
+      s06:{n:6,title:T.s6,est:2,status:"skipped",note:T.n6}
     },
     log:{}
   };
-  s.log[t0-1500]="开始任务"; s.log[t0-1300]={text:"2 个文件编码异常，已转换为 UTF-8",level:"warn"}; s.log[t0-1260]="第 1 步完成，开始清洗";
+  s.log[t0-1500]=T.l1; s.log[t0-1300]={text:T.l2,level:"warn"}; s.log[t0-1260]=T.l3;
   function push(){ if(cb) cb({exists:true,data:function(){return JSON.parse(JSON.stringify(s));}}); }
+  window.addEventListener("hashchange", function(){ location.reload(); });
   setInterval(function(){
     var now=Math.floor(Date.now()/1000), st=s.steps.s02;
     if(st.status==="running"){
-      st.done++; s.updatedAt=now; s.activity="正在清洗第 "+st.done+"/12 个 CSV";
-      if(st.done>=12){ st.status="done"; st.endedAt=now; s.steps.s03.status="running"; s.steps.s03.startedAt=now; s.activity="正在计算季度指标"; s.log[now]="清洗完成，开始计算指标"; }
+      st.done++; s.updatedAt=now; s.activity=T.act(st.done);
+      if(st.done>=12){ st.status="done"; st.endedAt=now; s.steps.s03.status="running"; s.steps.s03.startedAt=now; s.activity=T.act3; s.log[now]=T.l4; }
       push();
     }
   }, 4000);
