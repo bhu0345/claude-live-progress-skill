@@ -12,11 +12,11 @@ When Claude works on a long task (research, batch file processing, a multi-secti
 - time elapsed, **time left, and the expected finish time**
 - a short activity log
 
-**[▶ Try the live demo](https://bhu0345.github.io/claude-live-progress-skill/)** (simulated data, updates every few seconds)
+**[▶ Try the live demo](https://bhu0345.github.io/claude-live-progress-skill/#en)** (simulated data, updates every few seconds)
 
 <p>
-  <img src="docs/screenshot-light.png" alt="Live Progress page, light theme" width="62%">
-  <img src="docs/screenshot-dark-mobile.png" alt="Live Progress page, dark theme on a phone" width="28%">
+  <img src="docs/screenshot-light-en.png" alt="Live Progress page, light theme" width="62%">
+  <img src="docs/screenshot-dark-mobile-en.png" alt="Live Progress page, dark theme on a phone" width="28%">
 </p>
 
 ## How it works
