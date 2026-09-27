@@ -92,6 +92,10 @@ h2{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
 @keyframes slide{to{background-position:14.14px 0}}
 @media (max-width:560px){.panel{grid-template-columns:minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
+.demo-bar{max-width:760px;margin:0 auto;padding:14px 16px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.demo-bar a{color:var(--accent);text-decoration:none;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:3px 12px;background:var(--surface)}
+.demo-bar a:hover{border-color:var(--accent)}
+.demo-bar a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 
 <main class="wrap">
@@ -139,7 +143,7 @@ h2{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
 <script>
 /* Demo only: fakes the Claude runtime so this page runs outside Claude. Open with #en for English. */
 (function(){
-  var en = location.hash === "#en";
+  var en = location.hash === "#en" || /\/en\/(index\.html)?$/.test(location.pathname);
   var T = en ? {
     title:"Clean 2025 sales data and write the quarterly report", activity:"Cleaning CSV 7 of 12: merging duplicate customer records",
     s1:"Read and check 12 data files", n1:"2 files were GBK-encoded, converted", s2:"Clean the data", unit:"files",
@@ -169,6 +173,20 @@ h2{margin:0 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
   };
   s.log[t0-1500]=T.l1; s.log[t0-1300]={text:T.l2,level:"warn"}; s.log[t0-1260]=T.l3;
   function push(){ if(cb) cb({exists:true,data:function(){return JSON.parse(JSON.stringify(s));}}); }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    var bar = document.createElement("div");
+    bar.className = "demo-bar";
+    var note = document.createElement("span");
+    note.textContent = en ? "Demo with simulated data" : "演示页面，数据为模拟";
+    var a = document.createElement("a");
+    a.href = en ? "../" : "en/";
+    a.textContent = en ? "中文" : "English";
+    a.lang = en ? "zh-CN" : "en";
+    bar.appendChild(note); bar.appendChild(a);
+    document.body.insertBefore(bar, document.body.firstChild);
+    document.documentElement.lang = en ? "en" : "zh-CN";
+  });
   window.addEventListener("hashchange", function(){ location.reload(); });
   setInterval(function(){
     var now=Math.floor(Date.now()/1000), st=s.steps.s02;
